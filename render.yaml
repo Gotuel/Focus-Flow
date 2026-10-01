@@ -2,15 +2,14 @@ services:
   - type: web
     name: focus-flow-api
     runtime: node
+    plan: free
     rootDir: server
     buildCommand: npm ci
     startCommand: npm start
     healthCheckPath: /health
     envVars:
       - key: DATABASE_URL
-        fromDatabase:
-          name: focus-flow-db
-          property: connectionString
+        sync: false
 
   - type: web
     name: focus-flow-client
@@ -24,6 +23,3 @@ services:
           type: web
           name: focus-flow-api
           property: host
-
-databases:
-  - name: focus-flow-db
