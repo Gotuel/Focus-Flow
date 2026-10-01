@@ -7,6 +7,13 @@ services:
     buildCommand: npm ci
     startCommand: npm start
     healthCheckPath: /health
+    envVars:
+      - key: DATABASE_URL
+        sync: false
+      - key: SESSION_SECRET
+        generateValue: true
+      - key: FRONTEND_ORIGIN
+        value: https://focus-flow-client-fwuv.onrender.com
 
   - type: web
     name: focus-flow-client
