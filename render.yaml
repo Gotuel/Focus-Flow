@@ -1,0 +1,29 @@
+services:
+  - type: web
+    name: focus-flow-api
+    runtime: node
+    rootDir: server
+    buildCommand: npm ci
+    startCommand: npm start
+    healthCheckPath: /health
+    envVars:
+      - key: DATABASE_URL
+        fromDatabase:
+          name: focus-flow-db
+          property: connectionString
+
+  - type: web
+    name: focus-flow-client
+    runtime: static
+    rootDir: client
+    buildCommand: npm ci && npm run build
+    staticPublishPath: ./dist
+    envVars:
+      - key: VITE_API_URL
+        fromService:
+          type: web
+          name: focus-flow-api
+          property: host
+
+databases:
+  - name: focus-flow-db

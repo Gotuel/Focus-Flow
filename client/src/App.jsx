@@ -3,9 +3,13 @@ import { Check, ChevronDown, Circle, ListFilter, LoaderCircle, Plus, Search, Tra
 
 const categories = ['All', 'Work', 'Personal', 'Learning'];
 const priorities = ['low', 'medium', 'high'];
+const configuredApiUrl = import.meta.env.VITE_API_URL?.trim();
+const apiBaseUrl = configuredApiUrl
+  ? (/^https?:\/\//i.test(configuredApiUrl) ? configuredApiUrl : `https://${configuredApiUrl}`).replace(/\/+$/, '')
+  : '';
 
 const api = async (path, options) => {
-  const response = await fetch(`/api${path}`, { headers: { 'Content-Type': 'application/json' }, ...options });
+  const response = await fetch(`${apiBaseUrl}/api${path}`, { headers: { 'Content-Type': 'application/json' }, ...options });
   if (!response.ok && response.status !== 204) throw new Error('Something went wrong.');
   return response.status === 204 ? null : response.json();
 };
@@ -56,6 +60,6 @@ export default function App() {
       <div className="task-heading"><div><p className="eyebrow">TASKS</p><h2>{filter === 'All' ? 'All tasks' : filter}</h2></div><span>{visibleTodos.filter(t => !t.completed).length} remaining</span></div>
       <div className="task-list">{loading ? <div className="empty"><LoaderCircle className="spin" /> Loading your tasks…</div> : visibleTodos.length ? visibleTodos.map((todo) => <article className={`task ${todo.completed ? 'completed' : ''}`} key={todo.id}><button className="check" onClick={() => toggleTodo(todo)} aria-label={`Mark ${todo.title} as ${todo.completed ? 'incomplete' : 'complete'}`}>{todo.completed && <Check size={14} strokeWidth={3} />}</button><div className="task-text"><h3>{todo.title}</h3><div><span className={`tag ${todo.category.toLowerCase()}`}>{todo.category}</span><span className={`priority ${todo.priority}`}>{todo.priority}</span></div></div><button className="delete" onClick={() => deleteTodo(todo.id)} aria-label={`Delete ${todo.title}`}><Trash2 size={18} /></button></article>) : <div className="empty"><ListFilter size={28} />No tasks found. Add one above!</div>}</div>
     </section>
-    <footer>Built with React & Node.js <span>·</span> A focused place for your day</footer>
+    <footer>Built with React & Node.js by OTAKAYA Abbé Gotuel <span> . </span> A focused place for your day</footer>
   </main>;
 }
