@@ -7,9 +7,6 @@ services:
     buildCommand: npm ci
     startCommand: npm start
     healthCheckPath: /health
-    envVars:
-      - key: DATABASE_URL
-        sync: false
 
   - type: web
     name: focus-flow-client
