@@ -17,6 +17,6 @@ services:
     envVars:
       - key: VITE_API_URL
         fromService:
-          type: web
           name: focus-flow-api
-          property: host
+          type: web
+          envVarKey: RENDER_EXTERNAL_HOSTNAME
