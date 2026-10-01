@@ -13,6 +13,7 @@ const app = express();
 const port = Number(process.env.PORT || 3001);
 const isProduction = process.env.NODE_ENV === 'production';
 const sessionSecret = process.env.SESSION_SECRET;
+const sessionCookieSameSite = isProduction ? 'none' : 'lax';
 const pool = process.env.DATABASE_URL
   ? new Pool({ connectionString: process.env.DATABASE_URL, connectionTimeoutMillis: 10_000 })
   : null;
@@ -53,7 +54,7 @@ app.use(session({
   cookie: {
     httpOnly: true,
     secure: isProduction,
-    sameSite: 'lax',
+    sameSite: sessionCookieSameSite,
     maxAge: 7 * 24 * 60 * 60 * 1000
   }
 }));
@@ -226,7 +227,7 @@ app.post('/api/auth/logout', requireAuth, (req, res, next) => {
     res.clearCookie('focusflow.sid', {
       httpOnly: true,
       secure: isProduction,
-      sameSite: 'lax'
+      sameSite: sessionCookieSameSite
     });
     res.status(204).end();
   });
