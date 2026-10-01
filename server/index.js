@@ -14,7 +14,7 @@ const port = Number(process.env.PORT || 3001);
 const isProduction = process.env.NODE_ENV === 'production';
 const sessionSecret = process.env.SESSION_SECRET;
 const pool = process.env.DATABASE_URL
-  ? new Pool({ connectionString: process.env.DATABASE_URL })
+  ? new Pool({ connectionString: process.env.DATABASE_URL, connectionTimeoutMillis: 10_000 })
   : null;
 const PgSessionStore = connectPgSimple(session);
 const sessionStore = pool
